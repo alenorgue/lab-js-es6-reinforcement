@@ -132,9 +132,10 @@ const promo20 = users => {
   // Your code goes here ...
 // tenemos que filtar los que tienen =20k de balance y generar un mensaje `${user.firstName}` + mensaje
 const VIPusers = users
-.filter(user => parseFloat(user.balance) >= 20000)  // Aseguramos que balance sea un número
+.filter(user => parseFloat(user.balance.replace(/[$,]/g, '')) >= 20000)  // Remove $ and commas before parsing
 .map(user => {  // Usamos map para crear el mensaje
-  return `Dear ${user.firstName}, since your balance is $${parseFloat(user.balance).toFixed(2)}, you are eligible to apply for this awesome credit card.`;
+  const balance = parseFloat(user.balance.replace(/[$,]/g, '')).toFixed(2);  // Clean and format balance
+  return `Dear ${user.firstName}, since your balance is $${balance}, you are eligible to apply for this awesome credit card.`;
 });
 
 return VIPusers; 
@@ -152,9 +153,13 @@ console.log(promo20(usersArray));
 
 const addActive = users => {
   // Your code goes here ...
+  usersArray.forEach(user => {
+    user.isActive = true;
+  });
+  return users;
 };
 
-addActive(usersArray);
+console.log(addActive(usersArray));
 // expected output:
 // [
 //    { firstName: 'Kirby',
